@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 namespace Notivo.Application.Features.Authentication.Commands
 {
-    internal class LoginCommand
+    public class LoginCommand : IRequest<string>
     {
+        public required string Email { get; set; }
+        public required string Password { get; set; }
     }
 }
