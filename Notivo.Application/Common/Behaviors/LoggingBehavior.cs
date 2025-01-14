@@ -1,12 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Notivo.Application.Common.Behaviors
 {
-    internal class LoggingBehavior
+    public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
+        private readonly ILogger<TRequest> _logger;
+
+        public LoggingBehavior(ILogger<TRequest> logger)
+        {
+            _logger = logger;
+        }
+
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation($"Handling {typeof(TRequest).Name}");
+            var response = await next();
+            _logger.LogInformation($"Handled {typeof(TResponse).Name}");
+            return response;
+        }
     }
 }
